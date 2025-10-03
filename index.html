@@ -1,0 +1,951 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cotización App Mantenimiento del Hogar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #eff6ff 0%, #e0e7ff 100%);
+            padding: 2rem 1rem;
+            color: #1f2937;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .header-icon {
+            width: 40px;
+            height: 40px;
+            color: #4f46e5;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #1f2937;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: #4f46e5;
+            margin-bottom: 1rem;
+        }
+
+        h3 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1.5rem;
+        }
+
+        h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 1rem;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            font-size: 1rem;
+        }
+
+        .contact-info {
+            border-top: 1px solid #e5e7eb;
+            padding-top: 1rem;
+            margin-top: 1rem;
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .contact-info p {
+            margin-bottom: 0.25rem;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat-card {
+            padding: 1rem;
+            border-radius: 8px;
+        }
+
+        .stat-card.blue {
+            background: #eef2ff;
+        }
+
+        .stat-card.green {
+            background: #f0fdf4;
+        }
+
+        .stat-card.purple {
+            background: #faf5ff;
+        }
+
+        .stat-icon {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        .stat-subvalue {
+            font-size: 0.75rem;
+            color: #6b7280;
+            margin-top: 0.25rem;
+        }
+
+        .intro-text {
+            color: #374151;
+            margin-bottom: 1rem;
+        }
+
+        .considerations {
+            margin-top: 1.5rem;
+        }
+
+        .considerations h4 {
+            font-size: 1.125rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .considerations ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .considerations li {
+            display: flex;
+            align-items: start;
+            gap: 0.5rem;
+            margin-bottom: 0.75rem;
+            color: #374151;
+        }
+
+        .considerations li::before {
+            content: "•";
+            color: #4f46e5;
+            font-size: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .phase-accordion {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            overflow: hidden;
+        }
+
+        .phase-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: #f9fafb;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .phase-header:hover {
+            background: #f3f4f6;
+        }
+
+        .phase-header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .phase-number {
+            width: 32px;
+            height: 32px;
+            background: #4f46e5;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 0.875rem;
+        }
+
+        .phase-info h4 {
+            margin: 0;
+            font-size: 1rem;
+        }
+
+        .phase-meta {
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+
+        .chevron {
+            width: 20px;
+            height: 20px;
+            transition: transform 0.3s;
+            color: #6b7280;
+        }
+
+        .phase-content {
+            padding: 1rem;
+            background: white;
+            border-top: 1px solid #e5e7eb;
+            display: none;
+        }
+
+        .phase-content.active {
+            display: block;
+        }
+
+        .phase-header.active .chevron {
+            transform: rotate(180deg);
+        }
+
+        .phase-content ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .phase-content li {
+            display: flex;
+            align-items: start;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            font-size: 0.875rem;
+            color: #374151;
+        }
+
+        .check-icon {
+            width: 16px;
+            height: 16px;
+            color: #4f46e5;
+            margin-top: 2px;
+            flex-shrink: 0;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .detail-box {
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .detail-box h4 {
+            color: #4f46e5;
+            margin-bottom: 1rem;
+        }
+
+        .detail-list {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 1rem;
+        }
+
+        .detail-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.875rem;
+            margin-bottom: 0.5rem;
+            color: #374151;
+        }
+
+        .detail-list .hours {
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .detail-total {
+            padding-top: 1rem;
+            border-top: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            font-weight: 700;
+        }
+
+        .detail-total .total-hours {
+            color: #4f46e5;
+        }
+
+        .total-hours-card {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #eef2ff;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 700;
+        }
+
+        .total-hours-card .hours {
+            font-size: 1.5rem;
+            color: #4f46e5;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead tr {
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        th {
+            text-align: left;
+            padding: 0.75rem 1rem;
+            font-weight: 700;
+            color: #1f2937;
+        }
+
+        th:last-child {
+            text-align: right;
+        }
+
+        td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #f3f4f6;
+            color: #374151;
+        }
+
+        td:last-child {
+            text-align: right;
+            font-weight: 600;
+        }
+
+        .summary-card {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+        }
+
+        .summary-card h3 {
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .summary-row.total {
+            border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+            padding-top: 1rem;
+        }
+
+        .summary-row.final {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 2px solid rgba(255, 255, 255, 0.3);
+            border-bottom: none;
+        }
+
+        .summary-label {
+            font-size: 1.125rem;
+        }
+
+        .summary-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .summary-value.large {
+            font-size: 1.875rem;
+        }
+
+        .summary-value.discount {
+            color: #86efac;
+        }
+
+        .summary-subvalue {
+            font-size: 1.125rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .services-note {
+            padding-top: 1rem;
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .services-note ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 0.5rem;
+        }
+
+        .services-note li {
+            margin-bottom: 0.25rem;
+        }
+
+        .alert-box {
+            background: #fffbeb;
+            border-left: 4px solid #f59e0b;
+            border-radius: 8px;
+            padding: 1.5rem;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .alert-icon {
+            width: 24px;
+            height: 24px;
+            color: #f59e0b;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .alert-content h4 {
+            color: #92400e;
+            margin-bottom: 0.75rem;
+        }
+
+        .alert-content ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .alert-content li {
+            font-size: 0.875rem;
+            color: #78350f;
+            margin-bottom: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem 0.5rem;
+            }
+
+            .card {
+                padding: 1.5rem;
+            }
+
+            h1 {
+                font-size: 1.75rem;
+            }
+
+            h3 {
+                font-size: 1.5rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .details-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="card">
+            <div class="header">
+                <svg class="header-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                <div>
+                    <h1>Cotización de Desarrollo</h1>
+                    <p class="subtitle">App de Mantenimiento del Hogar</p>
+                </div>
+            </div>
+
+            <div class="contact-info">
+                <p><strong>Desarrollador:</strong> Cristian Eulises Sánchez Ramírez</p>
+                <p><strong>Email:</strong> scristianeulises@gmail.com</p>
+                <p><strong>Teléfono:</strong> +1 829 499 4556</p>
+                <p><strong>Fecha:</strong> 2 de Octubre 2025</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card blue">
+                    <svg class="stat-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                    </svg>
+                    <p class="stat-label">Duración del MVP</p>
+                    <p class="stat-value">16 semanas</p>
+                    <p class="stat-subvalue">Octubre 2025 - Febrero 2026</p>
+                </div>
+
+                <div class="stat-card green">
+                    <svg class="stat-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <p class="stat-label">Inversión Total</p>
+                    <p class="stat-value">$9,000</p>
+                    <p class="stat-subvalue">RD$522,000</p>
+                </div>
+
+                <div class="stat-card purple">
+                    <svg class="stat-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                    <p class="stat-label">Total de Horas</p>
+                    <p class="stat-value">420h</p>
+                    <p class="stat-subvalue">$26/hora</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Introducción -->
+        <div class="card">
+            <h3>Introducción</h3>
+            <p class="intro-text">
+                Este análisis estima el tiempo necesario para desarrollar una aplicación móvil (iOS y Android) y una API en Java/Spring Boot 
+                que sirva como backend para manejar las funcionalidades descritas: inicio de sesión, verificación de identidad (cédula, Face ID), 
+                perfiles de usuarios y técnicos, sistema de cobro y pago, agendar citas, categorías de servicios (limpieza, mantenimiento, averías, mudanzas), 
+                y geolocalización en tiempo real de técnicos.
+            </p>
+
+            <div class="considerations">
+                <h4>Consideraciones</h4>
+                <ul>
+                    <li><strong>Complejidad Alta:</strong> La aplicación incluye integración de mapas, pasarela de pagos, verificación biométrica y flujos tipo Uber.</li>
+                    <li><strong>Requerimientos de Personalización:</strong> App intuitiva, moderna y segura con backend eficiente y escalable.</li>
+                    <li><strong>Integración:</strong> Servicios externos como Stripe y Google Maps para sincronización en tiempo real.</li>
+                    <li><strong>Plazos Realistas:</strong> 16 semanas para la entrega del MVP (Octubre 2025 – Febrero 2026).</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Fases de Desarrollo -->
+        <div class="card">
+            <h3>
+                <svg style="display: inline; width: 28px; height: 28px; vertical-align: middle; margin-right: 8px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+                </svg>
+                Fases de Desarrollo del MVP
+            </h3>
+
+            <div class="phase-accordion">
+                <div class="phase-header" onclick="togglePhase(this)">
+                    <div class="phase-header-left">
+                        <div class="phase-number">1</div>
+                        <div class="phase-info">
+                            <h4>Fase 1: Análisis y Planificación</h4>
+                            <p class="phase-meta">1 semana • 20 horas • $520</p>
+                        </div>
+                    </div>
+                    <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+                <div class="phase-content">
+                    <ul>
+                        <li>
+                            <svg class="check-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Sistema de pagos y cobros - Stripe (30h)
+                        </li>
+                        <li>
+                            <svg class="check-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Sistema de agenda de citas (20h)
+                        </li>
+                        <li>
+                            <svg class="check-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Tracking con mapas en tiempo real (35h)
+                        </li>
+                        <li>
+                            <svg class="check-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Notificaciones push y correos (20h)
+                        </li>
+                        <li>
+                            <svg class="check-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Pruebas y documentación API (20h)
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="phase-accordion">
+                <div class="phase-header" onclick="togglePhase(this)">
+                    <div class="phase-header-left">
+                        <div class="phase-number">4</div>
+                        <div class="phase-info">
+                            <h4>Fase 4: Desarrollo App Móvil (iOS y Android)</h4>
+                            <p class="phase-meta">10 semanas • 260 horas • $6,760</p>
+                        </div>
+                    </div>
+                    <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+                <div class="phase-content">
+                    <ul>
+                        <li>
+                            <svg class="check-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Login/Registro y verificación (30h)
+                        </li>
+                        <li>
+                            <svg class="check-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Tracking de técnicos en mapa (40h)
+                        </li>
+                        <li>
+                            <svg class="check-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Sistema de agenda de citas (25h)
+                        </li>
+                        <li>
+                            <svg class="check-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Categorías de servicios y flujo de pedidos (30h)
+                        </li>
+                        <li>
+                            <svg class="check-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Perfiles de usuarios y técnicos (25h)
+                        </li>
+                        <li>
+                            <svg class="check-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Integración de pagos/cobros (30h)
+                        </li>
+                        <li>
+                            <svg class="check-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Historial de servicios BREGADO (20h)
+                        </li>
+                        <li>
+                            <svg class="check-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Pruebas en dispositivos (30h)
+                        </li>
+                        <li>
+                            <svg class="check-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Face ID y verificación de cédula (30h)
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="phase-accordion">
+                <div class="phase-header" onclick="togglePhase(this)">
+                    <div class="phase-header-left">
+                        <div class="phase-number">5</div>
+                        <div class="phase-info">
+                            <h4>Fase 5: Testing y QA</h4>
+                            <p class="phase-meta">2 semanas • 40 horas • $1,040</p>
+                        </div>
+                    </div>
+                    <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+                <div class="phase-content">
+                    <ul>
+                        <li>
+                            <svg class="check-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Testing funcional completo
+                        </li>
+                        <li>
+                            <svg class="check-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Testing de integración
+                        </li>
+                        <li>
+                            <svg class="check-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Corrección de bugs
+                        </li>
+                        <li>
+                            <svg class="check-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Testing de rendimiento
+                        </li>
+                        <li>
+                            <svg class="check-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Testing en múltiples dispositivos
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="phase-accordion">
+                <div class="phase-header" onclick="togglePhase(this)">
+                    <div class="phase-header-left">
+                        <div class="phase-number">6</div>
+                        <div class="phase-info">
+                            <h4>Fase 6: Despliegue</h4>
+                            <p class="phase-meta">1 semana • 20 horas • $520</p>
+                        </div>
+                    </div>
+                    <svg class="chevron" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                    </svg>
+                </div>
+                <div class="phase-content">
+                    <ul>
+                        <li>
+                            <svg class="check-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Configuración de servidores
+                        </li>
+                        <li>
+                            <svg class="check-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Despliegue en App Store
+                        </li>
+                        <li>
+                            <svg class="check-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Despliegue en Google Play
+                        </li>
+                        <li>
+                            <svg class="check-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Configuración de servicios externos
+                        </li>
+                        <li>
+                            <svg class="check-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
+                            </svg>
+                            Documentación final
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Detalle de Horas -->
+        <div class="card">
+            <h3>Detalle y Estimación de Tiempo</h3>
+            
+            <div class="details-grid">
+                <div class="detail-box">
+                    <h4>Backend/API (Java/Spring Boot)</h4>
+                    <ul class="detail-list">
+                        <li><span>Autenticación y autorización</span><span class="hours">25h</span></li>
+                        <li><span>Gestión de usuarios/técnicos y verificaciones</span><span class="hours">30h</span></li>
+                        <li><span>Pagos y cobros (Stripe)</span><span class="hours">30h</span></li>
+                        <li><span>Agenda de citas</span><span class="hours">20h</span></li>
+                        <li><span>Tracking con mapas</span><span class="hours">35h</span></li>
+                        <li><span>Notificaciones push y correos</span><span class="hours">20h</span></li>
+                        <li><span>Pruebas y documentación</span><span class="hours">20h</span></li>
+                    </ul>
+                    <div class="detail-total">
+                        <span>Total Backend:</span>
+                        <span class="total-hours">160 horas</span>
+                    </div>
+                </div>
+
+                <div class="detail-box">
+                    <h4>App Móvil (iOS y Android)</h4>
+                    <ul class="detail-list">
+                        <li><span>Diseño de la interfaz (UI/UX)</span><span class="hours">50h</span></li>
+                        <li><span>Login/Registro y verificación</span><span class="hours">30h</span></li>
+                        <li><span>Tracking de técnicos (mapa)</span><span class="hours">40h</span></li>
+                        <li><span>Agenda de citas</span><span class="hours">25h</span></li>
+                        <li><span>Categorías de servicios y flujo de pedido</span><span class="hours">30h</span></li>
+                        <li><span>Perfiles y ajustes</span><span class="hours">25h</span></li>
+                        <li><span>Integración de pagos/cobros</span><span class="hours">30h</span></li>
+                        <li><span>Pruebas</span><span class="hours">30h</span></li>
+                    </ul>
+                    <div class="detail-total">
+                        <span>Total App:</span>
+                        <span class="total-hours">260 horas</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="total-hours-card">
+                <span>Total de Horas del Proyecto:</span>
+                <span class="hours">420 horas</span>
+            </div>
+        </div>
+
+        <!-- Servicios Mensuales -->
+        <div class="card">
+            <h3>Servicios a Considerar (Costos Mensuales)</h3>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Servicio</th>
+                        <th>Precio Estimado (USD)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Pasarela de pagos (Stripe/PayPal)</td>
+                        <td>2-3% por transacción</td>
+                    </tr>
+                    <tr>
+                        <td>Servicios de mapas (Google Maps API)</td>
+                        <td>$200 - $500/mes</td>
+                    </tr>
+                    <tr>
+                        <td>Servidores en la nube (AWS/Heroku/DigitalOcean)</td>
+                        <td>$50 - $200/mes</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Resumen de Costos -->
+        <div class="summary-card">
+            <h3>Resumen de Costos del Software</h3>
+            
+            <div class="summary-row">
+                <span class="summary-label">Costo Base</span>
+                <span class="summary-value">$10,920</span>
+            </div>
+
+            <div class="summary-row">
+                <span class="summary-label">Descuento Especial (~17.6%)</span>
+                <span class="summary-value discount">-$1,920</span>
+            </div>
+
+            <div class="summary-row total">
+                <span class="summary-label"><strong>Subtotal (Costo Ajustado)</strong></span>
+                <span class="summary-value">$9,000</span>
+            </div>
+
+            <div class="services-note">
+                <p>Servicios variables adicionales:</p>
+                <ul>
+                    <li>• Pasarela de pagos: 2-3% por transacción</li>
+                    <li>• Google Maps API: $200 - $500/mes</li>
+                    <li>• Servidores: $50 - $200/mes</li>
+                </ul>
+            </div>
+
+            <div class="summary-row final">
+                <div>
+                    <div class="summary-label"><strong>Total Final Estimado</strong></div>
+                </div>
+                <div style="text-align: right;">
+                    <div class="summary-value large">$9,000</div>
+                    <div class="summary-subvalue">RD$522,000</div>
+                    <div class="summary-subvalue" style="font-size: 0.875rem;">+ servicios variables</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Notas Importantes -->
+        <div class="alert-box">
+            <svg class="alert-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
+            </svg>
+            <div class="alert-content">
+                <h4>Notas Importantes:</h4>
+                <ul>
+                    <li>• Esta cotización incluye el desarrollo completo de iOS y Android</li>
+                    <li>• El costo por hora es de $26 USD</li>
+                    <li>• Los servicios de terceros (mapas, pagos, servidores) se facturan por separado</li>
+                    <li>• El timeline asume inicio en octubre 2025 con entrega en febrero 2026</li>
+                    <li>• Se incluye descuento especial del 17.6% sobre el costo base</li>
+                    <li>• El mantenimiento post-lanzamiento se cotiza por separado</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function togglePhase(element) {
+            const content = element.nextElementSibling;
+            const isActive = content.classList.contains('active');
+            
+            // Close all phases
+            document.querySelectorAll('.phase-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            document.querySelectorAll('.phase-header').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // Toggle current phase
+            if (!isActive) {
+                content.classList.add('active');
+                element.classList.add('active');
+            }
+        }
+    </script>
+</body>
+</html>
